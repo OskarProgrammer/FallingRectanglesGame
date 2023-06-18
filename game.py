@@ -50,7 +50,7 @@ class Game(object):
         
         pygame.quit()
 
-    def event_handling(self):
+    def event_handling(self) -> bool:
         if self.position_play.x > self.screen.get_width() or self.position_play.y > self.screen.get_height() or self.position_play.x < -20 or self.position_play.y < -20:
             self.position_play.y = self.screen.get_height()
             self.position_play.x = self.screen.get_width()
@@ -58,7 +58,7 @@ class Game(object):
         return False
 
     def warning(self):
-        width = self.screen.get_width()/4
+        width = self.screen.get_width()/4 # set this to self.screen.get_width()/3 if you want fullscreen
         height = self.screen.get_height()/2
 
         self.font = pygame.font.SysFont('comicsans', 50)
@@ -92,9 +92,19 @@ class Game(object):
     def ending_screen(self):
         self.background()
 
+        width = self.screen.get_width()/4     #set this to self.screen.get_width()/3 if you want fullscreen, I think that would look better ! ;-)
+        height = self.screen.get_height()/2
+
         self.font = pygame.font.SysFont('comicsans', 50)
+
         self.label = self.font.render(f'You lost... Your score: {self.score-1}', 1, "black", "white")
-        self.screen.blit(self.label, (self.screen.get_width()/4, self.screen.get_height()/2))
+        self.label2 = self.font.render(f'Click y to play again', 1, "black", "white")
+        self.label3 = self.font.render(f'Click q to leave', 1, "black", "white")
+
+        x = 40
+        self.screen.blit(self.label, (width, height-x)) 
+        self.screen.blit(self.label2, (width+32, height+35-x)) 
+        self.screen.blit(self.label3, (width+64, height+72-x)) 
 
         pygame.display.flip()
 
@@ -104,7 +114,7 @@ class Game(object):
             for event in pygame.event.get():
                 if self.choice[pygame.K_y] or self.choice[pygame.K_KP_ENTER]:
                     self.loop()
-                elif self.choice[pygame.K_n] or self.choice[pygame.K_ESCAPE] or self.choice[pygame.K_e] or event.type == pygame.QUIT:
+                elif self.choice[pygame.K_n] or self.choice[pygame.K_ESCAPE] or self.choice[pygame.K_q] or event.type == pygame.QUIT:
                     pygame.quit()
                     
 
@@ -135,8 +145,6 @@ class Game(object):
             self.coor[x][1] += 5
             enemy = pygame.Rect(self.coor[x][0],self.coor[x][1],40,40)
             pygame.draw.rect(self.screen, "red", enemy)
-            
-        
 
     def player(self):
         self.player_rect = pygame.Rect(self.position_play.x, self.position_play.y, 34, 34)
@@ -160,7 +168,7 @@ class Game(object):
         self.screen = pygame.display.set_mode((800, 600)) #setting resolution
         self.clock = pygame.time.Clock() #starting clock
         
-        # pygame.display.toggle_fullscreen() # turning on the fullscreen
+        # pygame.display.toggle_fullscreen()  turning on the fullscreen if you want
         pygame.display.set_caption("Falling rectangles") #setting the title of app
         pygame.display.set_icon(pygame.image.load("pobrane.png")) #changing the icon
 
