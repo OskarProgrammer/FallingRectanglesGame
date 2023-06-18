@@ -51,7 +51,7 @@ class Game(object):
         pygame.quit()
 
     def event_handling(self):
-        if self.position_play.x > self.screen.get_width() or self.position_play.y > self.screen.get_height() or self.position_play.x < 0 or self.position_play.y < 0:
+        if self.position_play.x > self.screen.get_width() or self.position_play.y > self.screen.get_height() or self.position_play.x < -20 or self.position_play.y < -20:
             self.position_play.y = self.screen.get_height()
             self.position_play.x = self.screen.get_width()
             return True
