@@ -1,6 +1,6 @@
 import pygame 
 import random
-
+import time
 class Game(object):
     def __init__(self):
         self.run()
@@ -20,16 +20,10 @@ class Game(object):
             self.player()
             self.score_tab()
 
-            # if self.event_handling():
-            #     self.WARNING = True
-            #     self.licznik = 0
-
-            # if self.WARNING and self.licznik >= 0:
-            #     self.licznik += 1
-            #     self.warning()
-            #     if self.licznik >= 50:
-            #         self.licznik = -1
-            #         self.WARNING = False
+            if self.event_handling():
+                self.warning()
+                time.sleep(3)
+                self.loop()
 
             try: 
                 self.isLose()
@@ -64,9 +58,19 @@ class Game(object):
         return False
 
     def warning(self):
-        self.font = pygame.font.SysFont('comicsans', 40)
-        self.label = self.font.render(f'YOU CANT TOUCH \n THE BORDER OF THE SCREEN', 1, "black", "white")
-        self.screen.blit(self.label, (self.screen.get_width(), self.screen.get_height()))
+        width = self.screen.get_width()/4
+        height = self.screen.get_height()/2
+
+        self.font = pygame.font.SysFont('comicsans', 50)
+
+        self.label = self.font.render(f'YOU CANT TOUCH THE BORDER', 1, "red", "white")
+        self.label2 = self.font.render(f'RESTARTING WITH SCORE 0 ', 1, "red", "white")
+
+        self.screen.blit(self.label, (width-70, height/2+100))
+        self.screen.blit(self.label2, (width-40, height/2+135))
+
+        pygame.display.flip()
+
 
     def add(self):
         if self.i % 5000:
