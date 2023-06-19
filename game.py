@@ -12,18 +12,29 @@ class Game(object):
         self.i = 0
 
         self.RUNNING = True
-        self.WARNING = False
-        self.licznik = -1
+        self.GAINED = True
 
         while self.RUNNING:
             self.background()
             self.player()
-            self.score_tab()
+            
+            if self.GAINED:
+                self.generate_point()
+                self.GAINED = False
+
+            self.point()
 
             if self.event_handling():
                 self.warning()
                 time.sleep(3)
                 self.loop()
+
+            try:
+                self.isPoint()
+            except:
+                pass
+
+            self.score_tab()
 
             try: 
                 self.isLose()
@@ -43,8 +54,6 @@ class Game(object):
 
             self.i += 1
 
-            self.add()
-
             pygame.display.flip()
             self.fps()
         
@@ -56,6 +65,22 @@ class Game(object):
             self.position_play.x = self.screen.get_width()
             return True
         return False
+
+    def isPoint(self):
+        if self.player_rect.colliderect(self.point_coor):
+            self.add()
+            self.GAINED = True
+
+    def point(self):
+
+        pygame.draw.rect(self.screen, "green",self.point_coor)
+
+    def generate_point(self):
+        x = random.randint(0,self.screen.get_width())
+        y = random.randint(0,self.screen.get_height())
+
+        self.point_coor = pygame.Rect(x,y,40,40)
+
 
     def warning(self):
         width = self.screen.get_width()/4 # set this to self.screen.get_width()/3 if you want fullscreen
@@ -73,8 +98,7 @@ class Game(object):
 
 
     def add(self):
-        if self.i % 5000:
-            self.score+=1
+        self.score+=1
 
     def score_tab(self):
         self.font = pygame.font.SysFont('comicsans', 40)
@@ -97,7 +121,7 @@ class Game(object):
 
         self.font = pygame.font.SysFont('comicsans', 50)
 
-        self.label = self.font.render(f'You lost... Your score: {self.score-1}', 1, "black", "white")
+        self.label = self.font.render(f'You lost... Your score: {self.score}', 1, "black", "white")
         self.label2 = self.font.render(f'Click y to play again', 1, "black", "white")
         self.label3 = self.font.render(f'Click q to leave', 1, "black", "white")
 
